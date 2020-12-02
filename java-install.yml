@@ -1,0 +1,8 @@
+---
+- name: Install Java/JDK on Ubuntu server
+  hosts: myservers
+  become: yes
+  tasks:
+    - name: Install Java
+      apt: name=openjdk-8-jdk state=present update_cache=yes   # apt-get update
+      tags: install_java

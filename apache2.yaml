@@ -1,0 +1,15 @@
+--- 
+- hosts: myservers
+  become: yes
+  tasks: 
+    - apt: "name=apache2 update_cache=yes state=latest"
+      name: "install apache2"
+
+    - apache2_module: "name=rewrite state=present"
+      name: "enabled mod_rewrite"
+      notify: 
+        - "restart apache2"
+
+  handlers:
+    - name: "restart apache2"
+      service: "name=apache2 state=restarted"

@@ -1,0 +1,5 @@
+--- 
+- hosts: myservers
+  become: yes
+  tasks: 
+    - apt: name=python-minimal

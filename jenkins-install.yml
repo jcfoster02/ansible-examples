@@ -1,0 +1,17 @@
+---
+- name: Installing Jenkins on Ubuntu server
+  hosts: myservers
+  become: yes
+  tasks:
+    - name: Download repo from Jenkins.io
+      apt_key: url=https://pkg.jenkins.io/debian-stable/jenkins.io.key state=present
+
+    - name: Making repo ready
+      apt_repository: repo='deb https://pkg.jenkins.io/debian-stable binary/' state=present
+    - name: Install Jenkins
+      apt: name=jenkins state=present
+      tags: install_jenkins
+
+    - name: Start the Jenkins Service
+      service: name=jenkins state=restarted enabled=yes
+      tags: restart_jenkins

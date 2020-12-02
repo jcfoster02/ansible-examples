@@ -1,0 +1,67 @@
+---
+- hosts: myservers
+  become: true
+
+  #Apache Configuration
+  tasks:
+    - name: install apache2
+      apt: name=apache2 update_cache=yes state=latest
+
+    - name: enabled mod_rewrite
+      apache2_module: name=rewrite state=present
+      notify:
+         - restart apache2
+
+  handlers:
+    - name: restart apache2
+      service: name=apache2 state=restarted
+
+  # MySQL Configuration
+
+  tasks:
+  - name: Install MySQL
+    action: apt pkg={{ item }} state=present
+    with_items:
+      - libmysqlclient-dev
+      - python-mysqldb
+      - mysql-server
+      - mysql-client
+
+  - name: Start the MySQL service
+    action: service name=mysql state=started
+
+  - name: Remove the test database
+    mysql_db:  name=test state=absent
+
+  - name: Create deploy user for mysql
+    mysql_user: user=”deploy” host=”%” password=password priv=*.*:ALL,GRANT
+
+  - name: Ensure anonymous users are not in the database
+    mysql_user: user=’’ host={{ item }} state=absent
+    with_items:
+      - 127.0.0.1
+      - ::1
+      - localhost
+
+  - name: Update mysql root password for all root accounts
+    mysql_user: name=root host={{ item }} password=password
+    with_items:
+      - 127.0.0.1
+      - ::1
+      - localhost
+
+  # Python install
+  tasks:
+  - name: Install Python 
+    apt: name=python-minimal
+
+  handlers:
+  - name: Reload Apache
+    service:
+      name: apache2
+      state: reloaded
+
+  - name: Restart Apache
+    service:
+      name: apache2
+      state: restarted

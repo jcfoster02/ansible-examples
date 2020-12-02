@@ -1,0 +1,13 @@
+---
+  - name: Installs nginx web server
+    apt: pkg=nginx state=installed update_cache=true
+    notify:
+      - start nginx
+
+  - name: Remove index.html for host
+    command: rm /usr/share/nginx/html/index.html
+
+  - name: Upload default index.html for host
+    copy: src=index.html dest=/usr/share/ngin
+
+

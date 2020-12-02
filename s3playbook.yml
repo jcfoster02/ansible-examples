@@ -1,0 +1,16 @@
+---
+- hosts: localhost 
+  tasks:
+  - name: create S3 bucket
+    s3_bucket:
+      name: test1bucket
+      aws_access_key: ASIAQYZ37JWTOWDIB2JN
+      aws_secret_key: sDqgnu9FkYYLhHC7wxSt++MryWsUG+GyJY7Wihve
+      security_token: FwoGZXIvYXdzEB4aDN5IRUwoCXsG195lZiK0AR8SV9cYyPdOJBC63oVAnUS2VoFPSyGBLG+NLBLI+qGVJr5JPgAf6sCPr5nWw2cR0Bx2XEyRAjR+Y6rS+cVn5mWfW3UpWwNQlmKH4tpkAXbT69SJOcJLJScbmSMtOsYW8zrO+cKaul5uLc0Yf0CvKsdNli/Ovv73PV5nDh63NE3jxrUy8yBGN47Cg5fcpWahQmf9T1qbqjKe7TuHVCMICo+OE52g/boQZayBiXVsnxaE/JJFSSjbreL9BTItK8x/0gGfKZ9wMDTZeHDiWKuimtGAkSCVU3R+vegkHWZ400rSp+yvbkRMcHjT
+      policy: "{{ lookup( 'file','bpolicy.json' )}}"
+      state: present
+      region: us-east-1
+      versioning: no
+      tags:
+         name: test1bucket
+         type: example

@@ -1,0 +1,52 @@
+---
+- hosts: all
+  become: yes
+  become_user: root
+  become_method: sudo
+
+  tasks:
+    - name: "shut down Debian flavored systems"
+      command: /sbin/shutdown -t now
+      when: ansible_facts['os_family'] == "Debian"
+
+# For multiple conditions grouped together using “or”, “and” logical operator:
+
+  tasks:
+    - name: "shut down CentOS 6 and Debian 7 systems"
+      command: /sbin/shutdown -t now
+      when: (ansible_facts['distribution'] == "CentOS" and ansible_facts['distribution_major_version'] == "6") or
+          (ansible_facts['distribution'] == "Debian" and ansible_facts['distribution_major_version'] == "7")
+
+#For multiple conditions with a logical “and”:
+
+  tasks:
+    - name: "shut down CentOS 6 systems"
+      command: /sbin/shutdown -t now
+      when:
+        - ansible_facts['distribution'] == "CentOS"
+        - ansible_facts['distribution_major_version'] == "6"
+
+# For when with register:
+
+---
+- hosts: webservers
+  tasks:
+   - command: /bin/false
+     register: result
+     ignore_errors: True
+
+   - command: echo "Executing when condition"
+     when: result is failed When with register
+
+
+#For when with loops: 
+
+---
+- hosts: webservers
+  tasks:
+    - command: echo {{ item }}
+      loop: [ 0, 2, 4, 6, 8, 10 ]
+      when: item > 5
+
+
+
