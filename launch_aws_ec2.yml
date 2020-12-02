@@ -4,7 +4,7 @@
   tasks:
     - name: ec2
       ec2:
-        key_name: key1  
+        key_name: jenkins-key  
         aws_access_key: "ASIAQYZ37JWTM7TWD2FI"
         aws_secret_key: "RH2zHLcJV6tc7z6nQlD/GK1mzz9c080uCppTCcFu"
         instance_type: t2.micro
