@@ -2,6 +2,15 @@
 - name: launch an ec2 instance
   hosts: localhost
   tasks:
-    - name: test
-      shell: /bin/sleep 137
-
+    - name: ec2
+      ec2:
+        key_name: jenkins-key1  
+        aws_access_key: "ASIAQYZ37JWTB7BYJ7FW"
+        aws_secret_key: "EK+6tl4NY5l3UEJ/ooAD7mIH1YYkfjAtDuQZKKk7"
+        instance_type: t2.micro
+        image: ami-00ddb0e5626798373
+        region: us-east-1
+        count: 1
+        wait: yes
+        instance_tags:
+          Name: Node1
